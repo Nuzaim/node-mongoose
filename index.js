@@ -13,14 +13,30 @@ connect.then((db)=>{
     })
     .then((dish)=>{
         console.log(dish);
-        return Dishes.find({});
+        return Dishes.findByIdAndUpdate(dish._id,
+        {
+            $set: {description: "Description updated"}
+        },
+        {new: true}
+        );
     })
-    .then((dishes)=>{
-        console.log(dishes);
+    .then((dish)=>{
+        console.log(dish);
+        dish.comments.push({
+            rating: 5,
+            comment: "nice food",
+            author: "Nuzaim"
+        });
+        return dish.save();
+    })
+    .then((dish)=>{
+        console.log(dish);
         return Dishes.deleteMany({});
-    }).then(()=>{
+    })
+    .then(()=>{
         return mongoose.connection.close();
-    }).catch((err)=>{
+    })
+    .catch((err)=>{
         console.log(err);
     });
 });
